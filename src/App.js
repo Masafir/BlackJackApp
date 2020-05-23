@@ -1,12 +1,19 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Game from './game';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  height: 90vh;
+  width: 100%;
+`;
 
 function App() {
   return (
-    <div className="App">
-      Welcom on Black Jack app 
-    </div>
+    <Container className="App">
+      <Game />
+    </Container>
   );
 }
 
