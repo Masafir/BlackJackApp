@@ -16,6 +16,13 @@ const Button = styled.button`
   background-color: ${props => props.color};
   border: none;
   border-radius: 5px;
+  margin-left: 5px;
+`;
+const View = styled.div`
+display: flex;
+justify-content: space-evenly;
+align-items: center;
+padding: 5px;
 `;
 
 export default function Game(props){
@@ -45,6 +52,10 @@ export default function Game(props){
     setPlayerHand([]);
     setPlayerScore([]);
     setDealerHand([]);
+    setGameStarted(false);
+    setPlayerWin();
+    setWin();
+    setLoose();
   }
 
   const startGame = () => {
@@ -79,6 +90,7 @@ export default function Game(props){
           break;
       }
     });
+    setPlayerScore(score);
     if(score == 21)
     {
       setWin(true);
@@ -107,6 +119,7 @@ export default function Game(props){
           break;
       }
     });
+    setDealerScore(score);
     if(score == 21)
     {
       setLoose(true);
@@ -123,33 +136,39 @@ export default function Game(props){
     if(playerWin)
     {
       setWin(true);
+      setLoose(false);
     }
     else if (playerWin == false){
-      setLoose(true)
+      setLoose(true);
+      setWin(false);
     }
   },[playerWin])
 
   console.log(win,loose);
   return(
     <Container>
-      Game money : {money}
+      {win && !loose ? "Vous avez gagné !" : !win && loose ? "Vous avez perdu ... " :
       <div>
-        <div> dealerHand {win ? "PERDU !!!" : null} {loose ? "GAGNE ..." : null}  : {dealerHand.map(card => <div>{card.suit} {card.value}</div>)} </div>
-        <div> playerHand {win ? "Gagné !!!" : null} {loose ? "perdu ..." : null} : {playerHand.map(card => <div>{card.suit} {card.value}</div>)} </div>
+        <div>
+          <div> Main du croupier : <div>Score : {dealerScore}</div> {dealerHand.map(card => <div>{card.suit} {card.value}</div>)} </div>
+          <div> Votre Main : <div>Score : {playerScore}</div> {playerHand.map(card => <div>{card.suit} {card.value}</div>)} </div>
+        </div>
+        <div>
+          {
+            gameStarted ? 
+            <View>
+              <Button color="#F20922" onClick={() => continueGame()}> Continue </Button>
+              <Button color="#000" onClick={() => standGame()}> Stand </Button>
+            </View>
+            :
+            <Button color="#0CC52A" onClick={() => startGame()}> Start Game </Button>
+          }
+        </div>
       </div>
+}
       <div>
-        {
-          gameStarted ? 
-          <div>
-            <Button color="#F20922" onClick={() => continueGame()}> Continue </Button>
-            <Button color="#000" onClick={() => standGame()}> Stand </Button>
-          </div>
-          :
-          <Button color="#0CC52A" onClick={() => startGame()}> Start Game </Button>
-        }
-        
         <Button color="#0070F5" onClick={() => resetGame()}> Reset </Button>
-      </div>
+      </div> 
     </Container>
   )
 };
